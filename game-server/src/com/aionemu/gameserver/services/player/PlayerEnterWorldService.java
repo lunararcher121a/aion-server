@@ -221,6 +221,15 @@ public final class PlayerEnterWorldService {
 		if (player.hasAccess(AdminConfig.GM_SKILLS))
 			GMService.getInstance().addGmSkills(player);
 		AbyssSkillService.updateSkills(player);
+		// Project authoritative Silkroad learned skills before sending the Aion skill list.
+		// Projection is NOACTION: native player_skills remains untouched.
+		if (com.aionemu.gameserver.silkroad.skills.BicheonPrototype.ENABLED
+				&& com.aionemu.gameserver.dataholders.DataManager.SKILL_DATA.getSkillTemplate(
+					com.aionemu.gameserver.silkroad.skills.BicheonPrototype.AION_SKILL_ID) != null
+				&& com.aionemu.gameserver.silkroad.skills.BicheonRepository.isLearnedWithMastery(player.getObjectId())) {
+			player.getSkillList().addSilkroadRuntimeSkill(player,
+				com.aionemu.gameserver.silkroad.skills.BicheonPrototype.AION_SKILL_ID, 1, false);
+		}
 		SplitList<PlayerSkillEntry> skillEntrySplitList = new DynamicServerPacketBodySplitList<>(player.getSkillList().getAllSkills(), false,
 			SM_SKILL_LIST.STATIC_BODY_SIZE, SkillEntryWriter.DYNAMIC_BODY_PART_SIZE_CALCULATOR);
 		skillEntrySplitList.forEach(part -> PacketSendUtility.sendPacket(player, new SM_SKILL_LIST(part)));
