@@ -1,7 +1,7 @@
 package com.aionemu.gameserver.silkroad.skills;
 
 import com.aionemu.gameserver.model.gameobjects.player.Player;
-import com.aionemu.gameserver.model.items.Item;
+import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.templates.item.enums.ItemGroup;
 
 /**
