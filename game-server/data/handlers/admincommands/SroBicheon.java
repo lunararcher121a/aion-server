@@ -93,7 +93,8 @@ public class SroBicheon extends AdminCommand {
             send(player, "Bicheon skill purchase denied: " + result);
             return;
         }
-        player.getSkillList().addSilkroadRuntimeSkill(player, BicheonPrototype.AION_SKILL_ID, 1, true);
+        if (BicheonPrototype.CLIENT_SKILL_ENABLED)
+            player.getSkillList().addSilkroadRuntimeSkill(player, BicheonPrototype.AION_SKILL_ID, 1, true);
         send(player, "Learned Silkroad Bicheon Smash A, cost 2 SP. Use //srobicheon cast to test.");
     }
 
