@@ -21,6 +21,32 @@ import com.aionemu.gameserver.utils.stats.CalculationType;
  */
 public class NpcGameStats extends CreatureGameStats<Npc> {
 
+	private volatile com.aionemu.gameserver.silkroad.monsters.SilkroadMonsterPrototype silkroadStats;
+
+	/** Per-instance override: never mutates shared Aion NpcTemplate stats. */
+	public void setSilkroadStats(com.aionemu.gameserver.silkroad.monsters.SilkroadMonsterPrototype stats) {
+		this.silkroadStats = java.util.Objects.requireNonNull(stats);
+	}
+
+	@Override
+	public Stat2 getMaxHp() {
+		var stats = silkroadStats;
+		return stats == null ? super.getMaxHp() : getStat(StatEnum.MAXHP, stats.maxHp());
+	}
+
+	@Override
+	public Stat2 getPDef() {
+		var stats = silkroadStats;
+		return stats == null ? super.getPDef() : getStat(StatEnum.PHYSICAL_DEFENSE, stats.physicalDefense());
+	}
+
+	@Override
+	public Stat2 getMainHandPAttack(java.util.Set<CalculationType> calculationTypes) {
+		var stats = silkroadStats;
+		return stats == null ? super.getMainHandPAttack(calculationTypes)
+				: getStat(StatEnum.PHYSICAL_ATTACK, stats.physicalAttack(), calculationTypes);
+	}
+
 	private long lastAttackTime = 0;
 	private long lastAttackedTime = 0;
 	private long nextAttackTime = 0;
