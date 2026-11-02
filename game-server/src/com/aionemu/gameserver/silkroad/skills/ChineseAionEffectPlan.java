@@ -2,6 +2,7 @@ package com.aionemu.gameserver.silkroad.skills;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.aionemu.gameserver.silkroad.mastery.ChineseMastery;
 import com.aionemu.gameserver.skillengine.effect.EffectType;
@@ -35,6 +36,16 @@ public final class ChineseAionEffectPlan {
 
     public static List<EffectType> candidates(ChineseMastery mastery) {
         return CANDIDATES.getOrDefault(mastery, List.of());
+    }
+
+    /**
+     * Physical-attack primitive suggested for the currently verified Chinese
+     * sample skill rows. This is NOT an Aion SkillTemplate id, nor a complete
+     * Silkroad damage/animation implementation. A missing row fails closed.
+     */
+    public static Optional<EffectType> candidatePrimaryEffectForSkill(int silkroadSkillId) {
+        return ChineseSkillCatalog.find(silkroadSkillId)
+                .map(skill -> EffectType.SKILLATTACKINSTANT);
     }
 
     /**
