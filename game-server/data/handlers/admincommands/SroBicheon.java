@@ -86,17 +86,14 @@ public class SroBicheon extends AdminCommand {
             send(player, "Bicheon XML template is not registered.");
             return;
         }
-        // The database commits the SP debit, SRO learned rank AND Aion player_skills row together.
+        // Atomic SQL debit + SRO skill ownership. Native Aion player_skills is untouched.
         BicheonRepository.LearnResult result =
                 BicheonRepository.learnSmashA(player.getObjectId(), player.getLevel());
         if (result != BicheonRepository.LearnResult.LEARNED) {
             send(player, "Bicheon skill purchase denied: " + result);
             return;
         }
-        // SQL is the source of truth and is already committed. This adds the
-        // hot in-memory skill and notifies the existing Aion client packet layer.
-        player.getSkillList().addSkill(player, BicheonPrototype.AION_SKILL_ID, 1);
-        send(player, "Learned Silkroad Bicheon Smash A, cost 2 SP. Aion skill template id: 59001.");
+        send(player, "Learned Silkroad Bicheon Smash A, cost 2 SP. Use //srobicheon cast to test.");
     }
 
     private void cast(Player player) {
@@ -112,10 +109,17 @@ public class SroBicheon extends AdminCommand {
             send(player, "Invalid PvE target or current combat state.");
             return;
         }
-        Skill skill = SkillEngine.getInstance().getSkillFor(
-                player, BicheonPrototype.AION_SKILL_ID, npc);
+        var template = com.aionemu.gameserver.dataholders.DataManager.SKILL_DATA
+                .getSkillTemplate(BicheonPrototype.AION_SKILL_ID);
+        if (template == null) {
+            send(player, "Bicheon skill template is unavailable.");
+            return;
+        }
+        // Server-authorized cast: no unsupported id is inserted into native
+        // Aion player_skills. The extra SQL/mastery gate checks every cast.
+        Skill skill = SkillEngine.getInstance().getSkillFor(player, template, npc, 1);
         if (skill == null || !PlayerRestrictions.canUseSkill(player, skill)) {
-            send(player, "Bicheon cannot be cast: Aion skill list, cooldown or status denied.");
+            send(player, "Bicheon cannot be cast: cooldown or combat restriction denied.");
             return;
         }
         skill.setTargetType(0, 0, 0, 0);
