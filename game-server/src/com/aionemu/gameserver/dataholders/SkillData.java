@@ -99,6 +99,29 @@ public class SkillData {
 		return masterySkillsByArmor.getOrDefault(itemGroup.getItemSubType(), Set.of());
 	}
 
+	/**
+	 * Add a feature-gated skill-data addon after the regular JAXB load.
+	 * Never overwrite official Aion template ids.
+	 */
+	public synchronized void registerAdditionalTemplates(SkillData extra) {
+		Objects.requireNonNull(extra, "extra");
+		Collection<SkillTemplate> incoming = extra.getSkillTemplates();
+		for (SkillTemplate template : incoming) {
+			if (skillTemplateById.containsKey(template.getSkillId()))
+				throw new IllegalArgumentException("Additional skill collides with Aion id " + template.getSkillId());
+		}
+		for (SkillTemplate template : incoming) {
+			int skillId = template.getSkillId();
+			skillTemplateById.put(skillId, template);
+			if (template.getGroup() != null)
+				skillTemplatesByGroup.computeIfAbsent(template.getGroup(), k -> new ArrayList<>()).add(template);
+			if (template.getStack() != null)
+				skillTemplatesByStack.computeIfAbsent(template.getStack(), k -> new ArrayList<>()).add(template);
+			if (template.getEffects() != null)
+				indexMasterySkills(skillId, template.getEffects().getEffects());
+		}
+	}
+
 	public SkillTemplate getSkillTemplate(int skillId) {
 		return skillTemplateById.get(skillId);
 	}
