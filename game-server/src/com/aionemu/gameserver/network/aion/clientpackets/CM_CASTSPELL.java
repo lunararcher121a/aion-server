@@ -88,6 +88,14 @@ public class CM_CASTSPELL extends AionClientPacket {
 			return;
 		}
 
+		// Silkroad skills are never authorized by a client-supplied skill id alone.
+		// Revalidate the persisted profile, mastery and weapon on every cast.
+		if (spellid == com.aionemu.gameserver.silkroad.skills.BicheonPrototype.AION_SKILL_ID
+				&& !com.aionemu.gameserver.silkroad.skills.BicheonPrototype.canCast(player)) {
+			sendPacket(SM_SYSTEM_MESSAGE.STR_SKILL_NOT_READY());
+			return;
+		}
+
 		SkillTemplate template = DataManager.SKILL_DATA.getSkillTemplate(spellid);
 		if (template == null || !template.isCastableByClient())
 			return;
