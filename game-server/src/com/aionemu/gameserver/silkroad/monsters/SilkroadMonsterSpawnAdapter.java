@@ -36,6 +36,9 @@ public final class SilkroadMonsterSpawnAdapter {
         VisibleObject object = SpawnEngine.spawnObject(template, instanceId);
         if (!(object instanceof Npc npc) || !npc.isSpawned())
             throw new IllegalStateException("Aion NPC spawn failed: " + npcId);
+        // Apply only to this spawned NPC; do not change its shared Aion template.
+        npc.getGameStats().setSilkroadStats(monster);
+        npc.getLifeStats().synchronizeWithMaxStats();
         return npc;
     }
 }
