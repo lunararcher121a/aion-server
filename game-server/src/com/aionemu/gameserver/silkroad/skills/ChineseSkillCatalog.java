@@ -32,10 +32,10 @@ public final class ChineseSkillCatalog {
                 3, "SKILL_CH_SWORD_SMASH_A_01", 174, 1, ChineseMastery.BICHEON, 5, 2, 0, 0, 0));
         add(skills, new ChineseSkillDefinition(
                 4, "SKILL_CH_SWORD_SMASH_B_01", 175, 1, ChineseMastery.BICHEON, 27, 117, 174, 9, 0));
-        // Chain root 6 links to sub-stage 7, which links to stage 8.
-        // Sub-stages are not independently trainable or represented as base skills.
-        add(skills, new ChineseSkillDefinition(
-                6, "SKILL_CH_SWORD_CHAIN_A_1S_01", 177, 1, ChineseMastery.BICHEON, 7, 5, 0, 0, 7));
+        // OpenSRO verifies a sword chain root at id 6 (group 177; 7 mastery;
+        // 5 SP; links to sub-stage 7 then 8), but the exact codename is not
+        // confirmed in the committed source. Do not guess a version key.
+        // Add it only when v1.150 skilldata can be checked by codename.
         add(skills, new ChineseSkillDefinition(
                 40, "SKILL_CH_SPEAR_BASE_01", 195, 1, ChineseMastery.HEUKSAL, 0, 0, 0, 0, 0));
         add(skills, new ChineseSkillDefinition(
