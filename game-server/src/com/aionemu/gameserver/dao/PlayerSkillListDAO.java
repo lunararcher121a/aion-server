@@ -17,6 +17,7 @@ import com.aionemu.gameserver.model.gameobjects.Persistable.PersistentState;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.skill.PlayerSkillEntry;
 import com.aionemu.gameserver.model.skill.PlayerSkillList;
+import com.aionemu.gameserver.silkroad.skills.BicheonPrototype;
 
 /**
  * Created on: 15.07.2009 19:33:07 Edited On: 13.09.2009 19:48:00
@@ -41,7 +42,9 @@ public class PlayerSkillListDAO {
 				while (rset.next()) {
 					int id = rset.getInt("skill_id");
 					int lv = rset.getInt("skill_level");
-					skills.add(new PlayerSkillEntry(id, lv, 0, PersistentState.UPDATED));
+					// Silkroad skill ownership belongs exclusively to sro_learned_skills.
+						if (id != BicheonPrototype.AION_SKILL_ID)
+							skills.add(new PlayerSkillEntry(id, lv, 0, PersistentState.UPDATED));
 				}
 			}
 		} catch (Exception e) {
@@ -73,12 +76,14 @@ public class PlayerSkillListDAO {
 		}
 
 		for (PlayerSkillEntry skill : skills) {
+			if (skill.getSkillId() == BicheonPrototype.AION_SKILL_ID)
+				continue;
 			skill.setPersistentState(PersistentState.UPDATED);
 		}
 	}
 
 	private static void addSkills(Connection con, Player player, List<PlayerSkillEntry> skills) {
-		skills = skills.stream().filter(Persistable.NEW).collect(Collectors.toList());
+		skills = skills.stream().filter(s -> s.getSkillId() != BicheonPrototype.AION_SKILL_ID).filter(Persistable.NEW).collect(Collectors.toList());
 		if (skills.isEmpty())
 			return;
 
@@ -98,7 +103,7 @@ public class PlayerSkillListDAO {
 	}
 
 	private static void updateSkills(Connection con, Player player, List<PlayerSkillEntry> skills) {
-		skills = skills.stream().filter(Persistable.CHANGED).collect(Collectors.toList());
+		skills = skills.stream().filter(s -> s.getSkillId() != BicheonPrototype.AION_SKILL_ID).filter(Persistable.CHANGED).collect(Collectors.toList());
 		if (skills.isEmpty())
 			return;
 
@@ -118,7 +123,7 @@ public class PlayerSkillListDAO {
 	}
 
 	private static void deleteSkills(Connection con, Player player, List<PlayerSkillEntry> skills) {
-		skills = skills.stream().filter(Persistable.DELETED).collect(Collectors.toList());
+		skills = skills.stream().filter(s -> s.getSkillId() != BicheonPrototype.AION_SKILL_ID).filter(Persistable.DELETED).collect(Collectors.toList());
 		if (skills.isEmpty())
 			return;
 
