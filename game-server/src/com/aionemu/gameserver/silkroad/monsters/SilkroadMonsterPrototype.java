@@ -14,7 +14,7 @@ public record SilkroadMonsterPrototype(
             throw new IllegalArgumentException("Invalid Silkroad monster code");
         if (name == null || name.isBlank() || name.length() > 128)
             throw new IllegalArgumentException("Invalid monster name");
-        if (level < 1 || maxHp < 1 || physicalAttack < 1 || physicalDefense < 0)
+        if (level < 1 || level > 127 || maxHp < 1 || maxHp > Integer.MAX_VALUE || physicalAttack < 1 || physicalDefense < 0)
             throw new IllegalArgumentException("Invalid monster stats");
         if (aionNpcId != null && aionNpcId <= 0)
             throw new IllegalArgumentException("Invalid Aion NPC template ID");
