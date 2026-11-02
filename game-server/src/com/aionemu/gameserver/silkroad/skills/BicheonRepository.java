@@ -187,8 +187,10 @@ public final class BicheonRepository {
 
     /**
      * ATOMIC SP PURCHASE: lock profile, check mastery/SP/ownership,
-     * debit SP, record Silkroad rank and Aion template id in ONE transaction.
-     * A second packet must fail and may never spend SP a second time.
+     * debit SP and record the Silkroad skill in ONE transaction.
+     * Never store unknown Aion id 59001 in native player_skills, so standard
+     * player login cannot send an unsupported client skill id.
+     * A second purchase fails and never spends SP twice.
      */
     public static LearnResult learnSmashA(int playerId, int characterLevel) {
         if (characterLevel < REQUIRED_MASTERY || !BicheonPrototype.ENABLED)
@@ -246,12 +248,6 @@ public final class BicheonRepository {
                     ps.setInt(2, BicheonPrototype.SILKROAD_SKILL_ID);
                     ps.executeUpdate();
                 }
-                try (PreparedStatement ps = con.prepareStatement(
-                        "INSERT INTO player_skills (player_id,skill_id,skill_level) VALUES (?,?,1)")) {
-                    ps.setInt(1, playerId);
-                    ps.setInt(2, BicheonPrototype.AION_SKILL_ID);
-                    ps.executeUpdate();
-                }
                 con.commit();
                 return LearnResult.LEARNED;
             } catch (SQLException e) {
@@ -268,14 +264,10 @@ public final class BicheonRepository {
     }
 
     private static boolean isExistingSkill(Connection con, int playerId) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement("""
-                SELECT 1 FROM sro_learned_skills WHERE player_id=? AND skill_id=?
-                UNION ALL
-                SELECT 1 FROM player_skills WHERE player_id=? AND skill_id=? LIMIT 1""")) {
+        try (PreparedStatement ps = con.prepareStatement(
+                "SELECT 1 FROM sro_learned_skills WHERE player_id=? AND skill_id=?")) {
             ps.setInt(1, playerId);
             ps.setInt(2, BicheonPrototype.SILKROAD_SKILL_ID);
-            ps.setInt(3, playerId);
-            ps.setInt(4, BicheonPrototype.AION_SKILL_ID);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
             }
