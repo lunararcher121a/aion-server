@@ -141,6 +141,12 @@ public class Skill {
 	 * @return True if the skill can be used
 	 */
 	public boolean canUseSkill(CastState castState) {
+		// Defense in depth: even direct SkillEngine entrypoints cannot bypass
+		// Chinese mastery, learned-skill and sword checks for the prototype.
+		if (skillTemplate.getSkillId() == com.aionemu.gameserver.silkroad.skills.BicheonPrototype.AION_SKILL_ID
+				&& effector instanceof Player player
+				&& !com.aionemu.gameserver.silkroad.skills.BicheonPrototype.canCast(player))
+			return false;
 		Properties properties = skillTemplate.getProperties();
 		if (properties != null && !properties.validate(this, castState)) {
 			log.debug("properties failed");
