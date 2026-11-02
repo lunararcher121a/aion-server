@@ -619,6 +619,14 @@ public class Skill {
 		removeObservers();
 		if (!effector.isCasting() || isCancelled)
 			return;
+		// Check again at hit time so a removed mastery/skill cannot complete
+		// an in-progress cast. Normal Aion skills are unaffected.
+		if (skillTemplate.getSkillId() == com.aionemu.gameserver.silkroad.skills.BicheonPrototype.AION_SKILL_ID
+				&& effector instanceof Player player
+				&& !com.aionemu.gameserver.silkroad.skills.BicheonPrototype.canCast(player)) {
+			effector.getController().cancelCurrentSkill(null);
+			return;
+		}
 		if (cancelOnUnusableFirstTarget() || endOnGoneFirstTarget())
 			return;
 		// check if target is out of skill range or other requirements are not met (anymore)
