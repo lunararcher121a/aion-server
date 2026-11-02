@@ -62,6 +62,9 @@ class ChineseSkillCatalogTest {
         // Id 2 is also present in Aion, but denotes an unrelated template.
         assertFalse(ChineseAionEffectPlan.hasClientVerifiedBinding(2));
         assertFalse(ChineseAionEffectPlan.hasClientVerifiedBinding(40));
+        assertEquals(EffectType.SKILLATTACKINSTANT,
+                ChineseAionEffectPlan.candidatePrimaryEffectForSkill(3).orElseThrow());
+        assertTrue(ChineseAionEffectPlan.candidatePrimaryEffectForSkill(999999).isEmpty());
         assertTrue(ChineseAionEffectPlan.candidates(ChineseMastery.COLD)
                 .contains(EffectType.SLOW));
         assertTrue(ChineseAionEffectPlan.candidates(ChineseMastery.FORCE)
