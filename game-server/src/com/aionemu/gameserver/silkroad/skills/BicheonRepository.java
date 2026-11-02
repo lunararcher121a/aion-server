@@ -128,6 +128,19 @@ public final class BicheonRepository {
         try (Connection con = DatabaseFactory.getConnection()) {
             con.setAutoCommit(false);
             try {
+                // Match the purchase lock order: sro_characters first, then
+                // sro_masteries. This prevents concurrent GM changes from
+                // racing with a normal SP purchase.
+                try (PreparedStatement ps = con.prepareStatement(
+                        "SELECT player_id FROM sro_characters WHERE player_id=? FOR UPDATE")) {
+                    ps.setInt(1, playerId);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (!rs.next()) {
+                            rollback(con);
+                            return false;
+                        }
+                    }
+                }
                 long total = 0;
                 int current = -1;
                 try (PreparedStatement ps = con.prepareStatement(
