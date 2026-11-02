@@ -55,6 +55,11 @@ public class PlayerRestrictions {
 		VisibleObject target = player.getTarget();
 		SkillTemplate template = skill.getSkillTemplate();
 
+		// Extra server-side gate, independent of Aion client UI packets.
+		if (template.getSkillId() == com.aionemu.gameserver.silkroad.skills.BicheonPrototype.AION_SKILL_ID
+				&& !com.aionemu.gameserver.silkroad.skills.BicheonPrototype.canCast(player))
+			return false;
+
 		if (!checkFly(player) || player.getLifeStats().isAboutToDie() || player.isDead()) {
 			return false;
 		}
