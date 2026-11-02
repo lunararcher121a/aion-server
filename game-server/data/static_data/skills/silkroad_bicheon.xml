@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Opt-in, server-only prototype. Aion client 4.8 has no artwork/animation for ID 59001. -->
+<skill_data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="skills.xsd">
+    <skill_template skill_id="59001" name="Silkroad - Bicheon Smash A (Prototype)"
+                    nameId="0" group="SRO_CH_SWORD_SMASH"
+                    stack="SRO_CH_SWORD_SMASH_A_01" lvl="1"
+                    skilltype="PHYSICAL" skillsubtype="ATTACK" tslot="NONE"
+                    activation="ACTIVE" cooldownId="59001" cooldown="40"
+                    duration="0" hostile_type="DIRECT">
+        <properties first_target="TARGET" first_target_range="3"
+                    target_relation="ENEMY" target_type="ONLYONE" target_maxcount="1" />
+        <startconditions>
+            <weapon weapon="SWORD" />
+        </startconditions>
+        <useconditions>
+            <move_casting allow="false" />
+        </useconditions>
+        <endconditions>
+            <mp value="10" delta="0" />
+        </endconditions>
+        <effects>
+            <skillatk value="20" e="1" hoptype="DAMAGE" />
+        </effects>
+        <!-- No invented client animation. Existing Aion SkillEngine applies HP damage. -->
+    </skill_template>
+</skill_data>
