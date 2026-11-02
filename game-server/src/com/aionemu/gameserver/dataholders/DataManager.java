@@ -151,6 +151,16 @@ public final class DataManager {
 		SKILL_DATA = data.skillData;
 		SKILL_CHARGE_DATA = data.skillChargeData;
 		MOTION_DATA = data.motionData;
+		// Bicheon v0: register a separate XML template without editing Aion's 13 MB skill catalogue.
+		// Disabled by default. Startup fails explicitly if an enabled addon has bad XML.
+		if (com.aionemu.gameserver.silkroad.skills.BicheonPrototype.ENABLED) {
+			SkillData extra = com.aionemu.gameserver.utils.xml.JAXBUtil.deserialize(
+				new java.io.File("./data/static_data/skills/silkroad_bicheon.xml"),
+				SkillData.class, "./data/static_data/skills/skills.xsd");
+			SKILL_DATA.registerAdditionalTemplates(extra);
+			log.info("Silkroad Bicheon test skill id {} enabled",
+				com.aionemu.gameserver.silkroad.skills.BicheonPrototype.AION_SKILL_ID);
+		}
 		SKILL_TREE_DATA = data.skillTreeData;
 		TITLE_DATA = data.titleData;
 		TRADE_LIST_DATA = data.tradeListData;
