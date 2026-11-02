@@ -19,6 +19,8 @@ public final class BicheonPrototype {
     /** Aion cooldown field 40 = 4 seconds (unit 100 ms). */
     public static final int PROTOTYPE_COOLDOWN = 40;
     public static final boolean ENABLED = Boolean.getBoolean("silkroad.bicheon.enabled");
+    /** Keep unknown custom IDs out of unpatched Aion 4.8 clients by default. */
+    public static final boolean CLIENT_SKILL_ENABLED = Boolean.getBoolean("silkroad.bicheon.clientEnabled");
 
     private BicheonPrototype() {
     }
