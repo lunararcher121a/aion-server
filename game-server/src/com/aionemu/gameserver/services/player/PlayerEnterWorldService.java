@@ -224,6 +224,7 @@ public final class PlayerEnterWorldService {
 		// Project authoritative Silkroad learned skills before sending the Aion skill list.
 		// Projection is NOACTION: native player_skills remains untouched.
 		if (com.aionemu.gameserver.silkroad.skills.BicheonPrototype.ENABLED
+				&& com.aionemu.gameserver.silkroad.skills.BicheonPrototype.CLIENT_SKILL_ENABLED
 				&& com.aionemu.gameserver.dataholders.DataManager.SKILL_DATA.getSkillTemplate(
 					com.aionemu.gameserver.silkroad.skills.BicheonPrototype.AION_SKILL_ID) != null
 				&& com.aionemu.gameserver.silkroad.skills.BicheonRepository.isLearnedWithMastery(player.getObjectId())) {
