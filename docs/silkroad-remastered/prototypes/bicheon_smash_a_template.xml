@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DESIGN TEMPLATE ONLY: intentionally outside data/static_data/skills/.
+  NOT LOADABLE: skill_id=0 is a placeholder; nameId and motion require
+  matching Aion 4.8 client resources. Do NOT copy to live skill_templates.xml.
+  Silkroad skill id 3 is a separate identifier and must NEVER be used here.
+  MP cost, cooldown, attack power and range below are provisional Aion values,
+  NOT verified Silkroad v1.150 balancing.
+-->
+<skill_data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="skills.xsd">
+    <skill_template skill_id="0" name="SRO Bicheon Smash A - prototype"
+        nameId="0" group="SRO_BICHEON_SMASH" stack="SRO_BICHEON_SMASH"
+        lvl="1" skilltype="PHYSICAL" skillsubtype="ATTACK"
+        tslot="NONE" activation="ACTIVE" cooldown="3000" duration="0"
+        cancel_rate="10" hostile_type="DIRECT">
+        <properties first_target="TARGET" first_target_range="3"
+            target_relation="ENEMY" target_type="ONLYONE" target_maxcount="1" />
+        <startconditions>
+            <weapon weapon="SWORD" />
+        </startconditions>
+        <endconditions>
+            <mp value="20" delta="0" />
+        </endconditions>
+        <effects>
+            <skillatk value="100" e="1" hoptype="DAMAGE" />
+        </effects>
+        <motion name="attack" />
+    </skill_template>
+</skill_data>
