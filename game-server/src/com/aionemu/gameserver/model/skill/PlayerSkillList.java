@@ -67,6 +67,16 @@ public final class PlayerSkillList implements SkillList<Player> {
 		return true;
 	}
 
+	/** Silkroad-owned skill: runtime only, never persisted to native player_skills. */
+	public synchronized boolean addSilkroadRuntimeSkill(Player player, int skillId, int skillLevel, boolean notifyClient) {
+		if (skills.containsKey(skillId))
+			return false;
+		skills.put(skillId, new PlayerSkillEntry(player, skillId, skillLevel, PersistentState.NOACTION));
+		if (notifyClient)
+			SkillLearnService.onLearnSkill(player, skillId, skillLevel, true);
+		return true;
+	}
+
 	/**
 	 * Only for usage with gathering and crafting skills.
 	 */
