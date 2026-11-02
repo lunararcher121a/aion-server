@@ -141,6 +141,8 @@ public final class PlayerSkillList implements SkillList<Player> {
 		PlayerSkillEntry entry = skills.remove(skillId);
 		if (entry == null)
 			return false;
+		if (skillId == com.aionemu.gameserver.silkroad.skills.BicheonPrototype.AION_SKILL_ID)
+			return true; // runtime projection: never enqueue native SQL deletion
 		entry.setPersistentState(PersistentState.DELETED);
 		synchronized (deletedSkills) {
 			deletedSkills.add(entry);
