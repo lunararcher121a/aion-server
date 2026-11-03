@@ -33,12 +33,18 @@ public final class SilkroadMonsterSpawnAdapter {
 
         SpawnTemplate template = SpawnEngine.newSpawn(spawn.worldId(), npcId,
                 spawn.x(), spawn.y(), spawn.z(), (byte) 0, spawn.respawnSeconds());
-        VisibleObject object = SpawnEngine.spawnObject(template, instanceId);
-        if (!(object instanceof Npc npc) || !npc.isSpawned())
+        SilkroadMonsterSpawnRegistry.register(template, monster);
+        VisibleObject object;
+        try {
+            object = SpawnEngine.spawnObject(template, instanceId);
+        } catch (RuntimeException ex) {
+            SilkroadMonsterSpawnRegistry.unregister(template);
+            throw ex;
+        }
+        if (!(object instanceof Npc npc) || !npc.isSpawned()) {
+            SilkroadMonsterSpawnRegistry.unregister(template);
             throw new IllegalStateException("Aion NPC spawn failed: " + npcId);
-        // Apply only to this spawned NPC; do not change its shared Aion template.
-        npc.getGameStats().setSilkroadStats(monster);
-        npc.getLifeStats().synchronizeWithMaxStats();
+        }
         return npc;
     }
 }
