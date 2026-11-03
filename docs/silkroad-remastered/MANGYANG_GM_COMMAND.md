@@ -6,8 +6,13 @@ Implemented:
 - `SpawnEngine.spawnObject` reapplies Silkroad stats when the same `SpawnTemplate` is reused by `RespawnService`.
 - Test feature flag `-Dsilkroad.monsters.enabled=true` (default off).
 
+**GM registration now completed:**
+- `data/handlers/admincommands/SroMangyang.java` is in the dynamically loaded handler directory.
+- `config/administration/commands.properties` grants `sromangyang = 9`.
+- `//sromangyang check` checks if candidate NPC 210671 exists in the loaded NPC data (does not spawn).
+- `//sromangyang spawn` is gated by `-Dsilkroad.monsters.enabled=true`.
+
 **Not yet integrated / verified:**
-- Command registration in the existing chat command registry and a GM access-level configuration entry. Do not assume the command is available in game.
 - Confirm candidate NPC ID 210671 exists in the actual Aion 4.8 NPC dataset and client.
 - Build/compile and actual in-game test.
 - Test-safe spawn placement (GM position may be blocked or unsafe), manual cleanup and limits.
@@ -16,3 +21,5 @@ Implemented:
 - Aion NPC level, name, AI and animations still come from the mapped Aion template; Silkroad overrides currently cover HP, physical attack and physical defense only.
 
 Do not enable this on production. First compile and wire command registration, then test on a disposable world.
+
+CI inspection: commit status returned no statuses, and PR workflow lookup returned no runs; neither proves a successful build. Run the push-triggered Actions workflow or compile on a test machine before enabling spawns.
