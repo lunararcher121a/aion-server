@@ -21,4 +21,13 @@ jobs:
           java-version: '25'
           cache: maven
       - name: Compile game server and dependencies
-        run: mvn -B -pl game-server -am -DskipTests package
+        run: |
+          set -o pipefail
+          mvn -B -pl game-server -am -DskipTests package 2>&1 | tee silkroad-build.log
+      - name: Upload compile log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: silkroad-compile-log
+          path: silkroad-build.log
+          if-no-files-found: warn
