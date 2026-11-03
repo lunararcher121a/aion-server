@@ -1,5 +1,6 @@
 package admincommands;
 
+import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.silkroad.monsters.MangyangTestPreset;
@@ -14,11 +15,19 @@ public class SroMangyang extends AdminCommand {
 
     public SroMangyang() {
         super("sromangyang", "Silkroad Mangyang spawn prototype (GM test only)",
-                "spawn - Spawn one Mangyang at your current position");
+                "check - Verify the candidate Aion NPC template is loaded\nspawn - Spawn one Mangyang at your current position");
     }
 
     @Override
     public void execute(Player player, String... params) {
+        if (params.length == 1 && "check".equalsIgnoreCase(params[0])) {
+            int npcId = MangyangTestPreset.CANDIDATE_AION_NPC_ID;
+            var template = DataManager.NPC_DATA == null ? null : DataManager.NPC_DATA.getNpcTemplate(npcId);
+            sendInfo(player, template == null
+                    ? "Mangyang model unavailable: Aion NPC template " + npcId + " was not loaded."
+                    : "Aion NPC template " + npcId + " loaded. Check its client model and hostility in game.");
+            return;
+        }
         if (params.length != 1 || !"spawn".equalsIgnoreCase(params[0])) {
             sendInfo(player);
             return;
