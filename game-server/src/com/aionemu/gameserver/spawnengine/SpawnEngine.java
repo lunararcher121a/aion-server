@@ -35,6 +35,8 @@ public class SpawnEngine {
 
 	public static VisibleObject spawnObject(SpawnTemplate spawn, int instanceIndex) {
 		VisibleObject visObj = getSpawnedObject(spawn, instanceIndex);
+		if (visObj instanceof Npc npc)
+			com.aionemu.gameserver.silkroad.monsters.SilkroadMonsterSpawnRegistry.applyIfRegistered(npc);
 		if (visObj != null) {
 			if (visObj.getSpawn() != null && visObj.getSpawn().isTemporarySpawn())
 				TemporarySpawnEngine.registerSpawned(visObj);
