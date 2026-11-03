@@ -8,8 +8,9 @@ import com.aionemu.gameserver.spawnengine.SpawnEngine;
 
 /**
  * Explicit opt-in bridge to native Aion NPC spawning.
- * The mapped NPC currently supplies its Aion stats, AI, mesh and animations;
- * Silkroad stats are stored separately and are not yet applied.
+ * The mapped NPC supplies its native Aion mesh, AI and animations.
+ * Silkroad combat stats are applied to the individual NPC through the spawn registry;
+ * the shared Aion NPC template remains unchanged.
  */
 public final class SilkroadMonsterSpawnAdapter {
     private SilkroadMonsterSpawnAdapter() {
